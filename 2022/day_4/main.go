@@ -8,12 +8,8 @@ import (
 )
 
 func main() {
-	file, _ := ioutil.ReadFile("input.txt")
+	input, _ := ioutil.ReadFile("input.txt")
 
-	fmt.Println(results(string(file)))
-}
-
-func results(input string) int {
 	total := 0
 	overlapsTotal := 0
 	splittedInput := strings.Split(string(input), "\n")
@@ -28,46 +24,36 @@ func results(input string) int {
 		lotOne := lots[i][0]
 		lotTwo := lots[i][1]
 
-		if isContained(lotOne, lotTwo) {
+		parsedLotOne := strings.Split(lotOne, "-")
+		parsedLotTwo := strings.Split(lotTwo, "-")
+
+		lotOneMin, _ := strconv.Atoi(parsedLotOne[0])
+		lotOneMax, _ := strconv.Atoi(parsedLotOne[1])
+
+		lotTwoMin, _ := strconv.Atoi(parsedLotTwo[0])
+		lotTwoMax, _ := strconv.Atoi(parsedLotTwo[1])
+
+		if isContained(lotOneMin, lotOneMax, lotTwoMin, lotTwoMax) {
 			total++
 		}
 
-		if overlaps(lotOne, lotTwo) {
+		if overlappedLots(lotOneMin, lotOneMax, lotTwoMin, lotTwoMax) {
 			overlapsTotal++
 		}
 	}
 
-	fmt.Println("part two", overlapsTotal)
-
-	return total
+	fmt.Println("Part one:", total)
+	fmt.Println("Part two:", overlapsTotal)
 }
 
-func isContained(lotOne string, lotTwo string) bool {
-	parsedLotOne := strings.Split(lotOne, "-")
-	parsedLotTwo := strings.Split(lotTwo, "-")
-
-	lotOneMin, _ := strconv.Atoi(parsedLotOne[0])
-	lotOneMax, _ := strconv.Atoi(parsedLotOne[1])
-
-	lotTwoMin, _ := strconv.Atoi(parsedLotTwo[0])
-	lotTwoMax, _ := strconv.Atoi(parsedLotTwo[1])
-
+func isContained(lotOneMin int, lotOneMax int, lotTwoMin int, lotTwoMax int) bool {
 	if lotOneMin >= lotTwoMin && lotOneMax <= lotTwoMax || lotOneMin <= lotTwoMin && lotOneMax >= lotTwoMax {
 		return true
 	}
 	return false
 }
 
-func overlaps(lotOne string, lotTwo string) bool {
-	parsedLotOne := strings.Split(lotOne, "-")
-	parsedLotTwo := strings.Split(lotTwo, "-")
-
-	lotOneMin, _ := strconv.Atoi(parsedLotOne[0])
-	lotOneMax, _ := strconv.Atoi(parsedLotOne[1])
-
-	lotTwoMin, _ := strconv.Atoi(parsedLotTwo[0])
-	lotTwoMax, _ := strconv.Atoi(parsedLotTwo[1])
-
+func overlappedLots(lotOneMin int, lotOneMax int, lotTwoMin int, lotTwoMax int) bool {
 	if lotOneMin >= lotTwoMin && lotOneMin <= lotTwoMax || lotTwoMin >= lotOneMin && lotTwoMin <= lotOneMax {
 		return true
 	}
