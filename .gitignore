@@ -6,3 +6,10 @@
 
 # Unignore all dirs
 !*/
+
+debug/
+target/
+
+./*/*/Cargo.lock
+
+**/*.rs.bk
